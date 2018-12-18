@@ -59,8 +59,8 @@ module internal CsvTypeBuilder =
       rowType.AddMember field.ProvidedProperty
 
     // The erased csv type will be parameterised by the tuple type
-    let csvErasedTypeWithRowErasedType = typedefof<CsvFile<_>>.MakeGenericType(rowErasedType) 
-    let csvErasedTypeWithGeneratedRowType = typedefof<CsvFile<_>>.MakeGenericType(rowType) 
+    let csvErasedTypeWithRowErasedType = ProvidedTypeBuilder.MakeGenericType(typedefof<CsvFile<_>>, [rowErasedType]) 
+    let csvErasedTypeWithGeneratedRowType = ProvidedTypeBuilder.MakeGenericType(typedefof<CsvFile<_>>, [rowType]) 
 
     let csvType = ProvidedTypeDefinition(asm, ns, typeName, Some csvErasedTypeWithGeneratedRowType, hideObjectMethods = true, nonNullable = true)
     csvType.AddMember rowType
@@ -77,7 +77,7 @@ module internal CsvTypeBuilder =
           | [ col ] ->  col
           | cols -> Expr.NewTuple cols
 
-      let delegateType = typedefof<Func<_,_,_>>.MakeGenericType(typeof<obj>, typeof<string[]>, rowErasedType)
+      let delegateType = ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_,_>>, [typeof<obj>; typeof<string[]>; rowErasedType])
 
       Expr.NewDelegate(delegateType, [parentVar; rowVar], body)
 
@@ -86,7 +86,7 @@ module internal CsvTypeBuilder =
       let rowVar = Var("row", rowErasedType)
       let rowVarExpr = Expr.Var rowVar
       let body = Expr.NewArray(typeof<string>, [ for field in fields -> field.ConvertBack rowVarExpr ])
-      let delegateType = typedefof<Func<_,_>>.MakeGenericType(rowErasedType, typeof<string[]>)
+      let delegateType = ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_>>, [rowErasedType; typeof<string[]>])
 
       Expr.NewDelegate(delegateType, [rowVar], body)
 

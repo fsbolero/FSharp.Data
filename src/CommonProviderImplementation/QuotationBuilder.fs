@@ -54,7 +54,7 @@ let (?) (typ:Type) (operation:string) (args1:'T) (args2: 'U) : Expr =
     | [| :? MethodInfo as mi |] -> 
         let mi = 
           if tyargs = [] then mi
-          else mi.MakeGenericMethod(tyargs |> Array.ofList)
+          else ProvidedTypeBuilder.MakeGenericMethod(mi, tyargs)
         if mi.IsStatic then Expr.CallUnchecked(mi, args)
         else Expr.CallUnchecked(List.head args, mi, List.tail args)
     | [| :? ConstructorInfo as ci |] ->

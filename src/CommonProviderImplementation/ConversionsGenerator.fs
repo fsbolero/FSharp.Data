@@ -46,14 +46,14 @@ let convertStringValue missingValuesStr cultureStr (field:PrimitiveInferedProper
   let returnType = 
     match field.TypeWrapper with
     | TypeWrapper.None -> field.TypeWithMeasure
-    | TypeWrapper.Option -> typedefof<option<_>>.MakeGenericType field.TypeWithMeasure
-    | TypeWrapper.Nullable -> typedefof<Nullable<_>>.MakeGenericType field.TypeWithMeasure
+    | TypeWrapper.Option -> ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [field.TypeWithMeasure])
+    | TypeWrapper.Nullable -> ProvidedTypeBuilder.MakeGenericType(typedefof<Nullable<_>>, [field.TypeWithMeasure])
 
   let returnTypeWithoutMeasure = 
     match field.TypeWrapper with
     | TypeWrapper.None -> field.RuntimeType
-    | TypeWrapper.Option -> typedefof<option<_>>.MakeGenericType field.RuntimeType
-    | TypeWrapper.Nullable -> typedefof<Nullable<_>>.MakeGenericType field.RuntimeType
+    | TypeWrapper.Option -> ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [field.RuntimeType])
+    | TypeWrapper.Nullable -> ProvidedTypeBuilder.MakeGenericType(typedefof<Nullable<_>>, [field.RuntimeType])
 
   let convert (value:Expr<string option>) =
     let convert value = 

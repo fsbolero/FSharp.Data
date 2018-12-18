@@ -1481,6 +1481,8 @@ module internal CookieHandling =
 type Http private() =
 
     static let charsetRegex = Regex("charset=([^;\s]*)", RegexOptions.Compiled)
+
+    static member val Client = Unchecked.defaultof<System.Net.Http.HttpClient> with get, set
     
     /// Correctly encodes large form data values.
     /// See https://blogs.msdn.microsoft.com/yangxind/2006/11/08/dont-use-net-system-uri-unescapedatastring-in-url-decoding/
@@ -1503,6 +1505,43 @@ type Http private() =
             + String.concat "&" [ for k, v in query -> Http.EncodeUrlParam k + "=" + Http.EncodeUrlParam v ]
 
     static member private InnerRequest
+            (
+                url:string,
+                toHttpResponse,
+                [<Optional>] ?query,
+                [<Optional>] ?headers:seq<string * string>,
+                [<Optional>] ?httpMethod,
+                [<Optional>] ?body,
+                [<Optional>] ?cookies:seq<_>,
+                [<Optional>] ?cookieContainer,
+                [<Optional>] ?silentHttpErrors,
+                [<Optional>] ?silentCookieErrors,
+                [<Optional>] ?responseEncodingOverride,
+                [<Optional>] ?customizeHttpRequest,
+                [<Optional>] ?timeout
+            ) = async {
+        let uri = Http.AppendQueryToUrl(url, defaultArg query []) |> Uri
+        let httpMethod =
+            match httpMethod with
+            | None -> if body.IsSome then HttpMethod.Post else HttpMethod.Get
+            | Some m -> m
+            |> System.Net.Http.HttpMethod
+        use msg = new System.Net.Http.HttpRequestMessage(httpMethod, uri)
+        headers |> Option.iter (fun headers ->
+            for k, v in headers do msg.Headers.Add(k, v)
+        )
+        let! resp = Http.Client.SendAsync(msg) |> Async.AwaitTask
+        let! body = resp.Content.ReadAsStringAsync() |> Async.AwaitTask // TODO: binary?
+        return { Body = Text body
+                 StatusCode = int resp.StatusCode
+                 ResponseUrl = url
+                 Headers = Map [ for h in resp.Headers do
+                                    for v in h.Value do
+                                        yield h.Key, v ]
+                 Cookies = Map.empty (* TODO *) }
+    }
+
+    static member private OldInnerRequest
             (
                 url:string,
                 toHttpResponse,

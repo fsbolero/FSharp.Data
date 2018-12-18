@@ -84,7 +84,7 @@ type public CsvProvider(cfg:TypeProviderConfig) as this =
             let stringArrayToRowVar = Var("stringArrayToRow", stringArrayToRow.Type)
             let rowToStringArrayVar = Var("rowToStringArray", rowToStringArray.Type)
             
-            let paramType = typedefof<seq<_>>.MakeGenericType(rowType)
+            let paramType = ProvidedTypeBuilder.MakeGenericType(typedefof<seq<_>>, [rowType])
             let headers = 
                 match sampleCsv.Headers with 
                 | None -> <@@ None: string[] option @@> 

@@ -65,7 +65,7 @@ module internal ReflectionHelpers =
     let makeDelegate (exprfunc:Expr -> Expr) argType = 
         let var = Var("t", argType)
         let convBody = exprfunc (Expr.Var var)
-        Expr.NewDelegateUnchecked(typedefof<Func<_,_>>.MakeGenericType(argType, convBody.Type), [var], convBody)
+        Expr.NewDelegateUnchecked(ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_>>, [argType; convBody.Type]), [var], convBody)
 
 // ----------------------------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ module internal ProviderHelpers =
         Expr.Let(f, convFunc, body) 
 
     let some (typ:Type) arg =
-        let unionType = typedefof<option<_>>.MakeGenericType typ
+        let unionType = ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [typ])
         let meth = unionType.GetMethod("Some")
         Expr.Call(meth, [arg])
 
@@ -382,7 +382,7 @@ module internal ProviderHelpers =
         let spec = parseResult.Spec
 
         let resultType = spec.RepresentationType
-        let resultTypeAsync = typedefof<Async<_>>.MakeGenericType(resultType) 
+        let resultTypeAsync = ProvidedTypeBuilder.MakeGenericType(typedefof<Async<_>>, [resultType]) 
 
         using (logTime "CommonTypeGeneration" valueToBeParsedOrItsUri) <| fun _ ->
         
@@ -440,7 +440,7 @@ module internal ProviderHelpers =
                   if not resultType.IsArray then
                   
                       let resultTypeArray = resultType.MakeArrayType()
-                      let resultTypeArrayAsync = typedefof<Async<_>>.MakeGenericType(resultTypeArray) 
+                      let resultTypeArrayAsync = ProvidedTypeBuilder.MakeGenericType(typedefof<Async<_>>, [resultTypeArray]) 
                       
                       // Generate static GetSamples method
                       let m = ProvidedMethod("GetSamples", [], resultTypeArray, isStatic = true,

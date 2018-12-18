@@ -43,7 +43,7 @@ type internal XmlGenerationContext =
         let typ, _, _, convBack = ConversionsGenerator.convertStringValue "" x.CultureStr prop
         typ, convBack
     member x.MakeOptionType(typ:Type) = 
-        typedefof<option<_>>.MakeGenericType typ
+        ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [typ])
 
 and internal XmlGenerationResult = 
     { ConvertedType : Type

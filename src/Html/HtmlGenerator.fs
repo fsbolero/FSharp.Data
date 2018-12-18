@@ -60,8 +60,8 @@ module internal HtmlGenerator =
         for field in fields do
             rowType.AddMember field.ProvidedProperty
         
-        let tableErasedWithRowErasedType = typedefof<HtmlTable<_>>.MakeGenericType(rowErasedType)
-        let tableErasedTypeWithGeneratedRow = typedefof<HtmlTable<_>>.MakeGenericType(rowType)
+        let tableErasedWithRowErasedType = ProvidedTypeBuilder.MakeGenericType(typedefof<HtmlTable<_>>, [rowErasedType])
+        let tableErasedTypeWithGeneratedRow = ProvidedTypeBuilder.MakeGenericType(typedefof<HtmlTable<_>>, [rowType])
         
         let rowConverter =
             let rowVar = Var("row", typeof<string[]>)
@@ -72,7 +72,7 @@ module internal HtmlGenerator =
               else Expr.NewTuple [ for field in fields -> field.Convert rowVarExpr ]
         
             let delegateType = 
-              typedefof<Func<_,_>>.MakeGenericType(typeof<string[]>, rowErasedType)
+              ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_>>, [typeof<string[]>; rowErasedType])
         
             Expr.NewDelegate(delegateType, [rowVar], body)
         
@@ -99,7 +99,7 @@ module internal HtmlGenerator =
                 let typ, _, conv, _convBack = ConversionsGenerator.convertStringValue missingValuesStr cultureStr (StructuralTypes.PrimitiveInferedProperty.Create("", typeof<string>, false, None))
                 typ, conv
                         
-        let listTypeWithErasedType = typedefof<HtmlList<_>>.MakeGenericType(listItemType)
+        let listTypeWithErasedType = ProvidedTypeBuilder.MakeGenericType(typedefof<HtmlList<_>>, [listItemType])
         
         let rowConverter =
             
@@ -108,7 +108,7 @@ module internal HtmlGenerator =
             let body = 
               conv <@ TextConversions.AsString(%%rowVarExpr:string) @>
         
-            let delegateType = typedefof<Func<_,_>>.MakeGenericType(typeof<string>, listItemType)
+            let delegateType = ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_>>, [typeof<string>; listItemType])
         
             Expr.NewDelegate(delegateType, [rowVar], body)
         
@@ -137,7 +137,7 @@ module internal HtmlGenerator =
                     let typ, _, conv, _convBack = ConversionsGenerator.convertStringValue missingValuesStr cultureStr (StructuralTypes.PrimitiveInferedProperty.Create("", typeof<String>, false, None))
                     typ, conv
                         
-            let listTypeWithErasedType = typedefof<HtmlList<_>>.MakeGenericType(listItemType)
+            let listTypeWithErasedType = ProvidedTypeBuilder.MakeGenericType(typedefof<HtmlList<_>>, [listItemType])
 
             let rowConverter =
                 
@@ -146,7 +146,7 @@ module internal HtmlGenerator =
                 let body = conv <@ TextConversions.AsString(%%rowVarExpr:string) @>
             
                 let delegateType = 
-                  typedefof<Func<_,_>>.MakeGenericType(typeof<string>, listItemType)
+                  ProvidedTypeBuilder.MakeGenericType(typedefof<Func<_,_>>, [typeof<string>; listItemType])
             
                 Expr.NewDelegate(delegateType, [rowVar], body)
             

@@ -219,7 +219,7 @@ let internal asyncRead (uriResolver:UriResolver) formatName encodingStr (uri:Uri
         let file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
         let encoding = if encodingStr = "" then Encoding.UTF8 else HttpEncodings.getEncoding encodingStr
         return new StreamReader(file, encoding) :> TextReader
-    }, Some path
+    }, None //Some path
 
 let private withUri uri f =
   match Uri.TryCreate(uri, UriKind.RelativeOrAbsolute) with

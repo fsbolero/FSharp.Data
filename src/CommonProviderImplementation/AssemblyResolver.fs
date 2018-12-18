@@ -27,8 +27,8 @@ let init (cfg : TypeProviderConfig) (tp: TypeProviderForNamespaces) =
 
     if not initialized then
         initialized <- true
-        if WebRequest.DefaultWebProxy <> null then
-            WebRequest.DefaultWebProxy.Credentials <- CredentialCache.DefaultNetworkCredentials
+        //if WebRequest.DefaultWebProxy <> null then
+        //    WebRequest.DefaultWebProxy.Credentials <- CredentialCache.DefaultNetworkCredentials
         ProvidedTypes.ProvidedTypeDefinition.Logger := Some FSharp.Data.Runtime.IO.log
 
     let runtimeFSharpDataAssembly = 

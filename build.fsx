@@ -71,7 +71,9 @@ else
     sdkPath <- Some (installDesiredVersion ())
 
 // Read release notes & version info from RELEASE_NOTES.md
-let release = ReleaseNotes.load "RELEASE_NOTES.md"
+let release =
+    let r = ReleaseNotes.load "RELEASE_NOTES.md"
+    { r with NugetVersion = r.NugetVersion + ".1" }
 
 let bindir = "./bin"
 

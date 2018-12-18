@@ -1,9 +1,9 @@
 RESTRICTION: >= net45
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    FAKE (5.3)
-    Microsoft.NETCore.App (2.1.5)
-    Microsoft.NETCore.Platforms (2.1.1) - restriction: >= net461
+    FAKE (5.8.4)
+    Microsoft.NETCore.App (2.2)
+    Microsoft.NETCore.Platforms (2.2) - restriction: >= net461
     NETStandard.Library (2.0.3) - restriction: >= net461
       Microsoft.NETCore.Platforms (>= 1.1)
     NetStandard.Library.NetFramework (2.0.0-preview2-25405-01)
@@ -11,14 +11,28 @@ NUGET
       NETStandard.Library (>= 2.0.0-preview2-25401-01) - restriction: >= net461
     Nuget.CommandLine (4.7.1)
     Octokit (0.32)
+    System.IO (4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= dnxcore50) (>= net46)) (&& (>= dnxcore50) (>= net461)) (&& (< net46) (>= net461) (< netstandard1.4)) (&& (< net46) (>= net461) (>= netstandard1.6)) (&& (< net46) (>= net461) (< netstandard1.6)) (>= net463)
+    System.Net.Http (4.3.4)
+      System.Security.Cryptography.X509Certificates (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (>= net46)
+    System.Runtime (4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= dnxcore50) (>= net46)) (&& (>= dnxcore50) (>= net461)) (&& (< net46) (>= net461) (< netstandard1.4)) (&& (< net46) (>= net461) (>= netstandard1.6)) (&& (< net46) (>= net461) (< netstandard1.6)) (>= net463)
+    System.Security.Cryptography.Algorithms (4.3.1) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= dnxcore50) (>= net46)) (&& (>= net46) (< netstandard1.4)) (>= net461)
+      System.IO (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.3) (< netstandard1.4)) (&& (>= net45) (< net46) (>= netstandard1.4) (< netstandard1.6)) (&& (>= net45) (< net46) (>= netstandard1.6)) (>= net463)
+      System.Runtime (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.3) (< netstandard1.4)) (&& (>= net45) (< net46) (>= netstandard1.4) (< netstandard1.6)) (&& (>= net45) (< net46) (>= netstandard1.6)) (>= net463)
+      System.Security.Cryptography.Encoding (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.6)) (>= net463)
+      System.Security.Cryptography.Primitives (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.3) (< netstandard1.4)) (&& (>= net45) (< net46) (>= netstandard1.4) (< netstandard1.6)) (&& (>= net45) (< net46) (>= netstandard1.6)) (&& (>= net46) (< netstandard1.4)) (&& (>= net461) (< netstandard1.6)) (>= net463)
+    System.Security.Cryptography.Encoding (4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= dnxcore50) (>= net46)) (&& (>= net46) (< netstandard1.4)) (>= net461)
+    System.Security.Cryptography.Primitives (4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= dnxcore50) (>= net46)) (&& (>= dnxcore50) (>= net461)) (&& (>= net46) (< netstandard1.4)) (&& (< net46) (>= net461) (>= netstandard1.6)) (&& (>= net461) (< netstandard1.4)) (&& (>= net461) (< netstandard1.6)) (>= net463)
+    System.Security.Cryptography.X509Certificates (4.3.2) - restriction: || (&& (>= dnxcore50) (>= net45)) (>= net46)
+      System.Security.Cryptography.Algorithms (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.3) (< netstandard1.4)) (&& (>= net45) (< net46) (>= netstandard1.4) (< netstandard1.6)) (&& (>= net45) (< net46) (>= netstandard1.6)) (&& (>= net46) (< netstandard1.4)) (>= net461)
+      System.Security.Cryptography.Encoding (>= 4.3) - restriction: || (&& (>= dnxcore50) (>= net45)) (&& (>= net45) (< net46) (>= netstandard1.3) (< netstandard1.4)) (&& (>= net45) (< net46) (>= netstandard1.4) (< netstandard1.6)) (&& (>= net45) (< net46) (>= netstandard1.6)) (&& (>= net46) (< netstandard1.4)) (>= net461)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (16fa0088b1cce2f04a126e2febeddd2b8b6e6048)
+    modules/Octokit/Octokit.fsx (457ae4cfb9bb4a39f0eb1352140584d7d04ebe5d)
       Octokit (>= 0.20)
   remote: fsprojects/FSharp.TypeProviders.SDK
-    src/ProvidedTypes.fs (330cce283de79ea39a5d4897c48662aa42d61e9d)
-    src/ProvidedTypes.fsi (330cce283de79ea39a5d4897c48662aa42d61e9d)
-    src/ProvidedTypesTesting.fs (330cce283de79ea39a5d4897c48662aa42d61e9d)
+    src/ProvidedTypes.fs (3a934e274650f1116cf7872226e7eac1bf775a6d)
+    src/ProvidedTypes.fsi (3a934e274650f1116cf7872226e7eac1bf775a6d)
+    src/ProvidedTypesTesting.fs (3a934e274650f1116cf7872226e7eac1bf775a6d)
 GROUP fs31
 RESTRICTION: || (== net461) (== netcoreapp2.0)
 NUGET

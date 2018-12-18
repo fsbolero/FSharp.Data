@@ -15,6 +15,7 @@ github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypesTesting.fs
 # see https://github.com/fsprojects/FSharp.TypeProviders.SDK/blob/0c0c9d11135039821a380f60ec21c701354e8cdb/src/ProvidedTypesTesting.fs
 nuget NetStandard.Library.NetFramework
 nuget Microsoft.NETCore.App
+nuget System.Net.Http
 
 # NOTE: These are only used for advice by examining the versions chosen in the paket.lock file.
 # NOTE: The PackageReference items are themselves added by hand to the project files.

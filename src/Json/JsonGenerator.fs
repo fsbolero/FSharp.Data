@@ -41,7 +41,7 @@ type internal JsonGenerationContext =
       TypeCache = typeCache 
       GenerateConstructors = generateConstructors }
   member x.MakeOptionType(typ:Type) = 
-    typedefof<option<_>>.MakeGenericType typ
+    ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [typ])
 
 type internal JsonGenerationResult = 
     { ConvertedType : Type
@@ -105,7 +105,7 @@ module JsonTypeBuilder =
     elif typ.IsArray && typ.GetElementType() = ctx.IJsonDocumentType then 
         ctx.JsonValueType.MakeArrayType()
     elif typ.IsGenericType && typ.GetGenericArguments() = [| ctx.IJsonDocumentType |] then
-        typ.GetGenericTypeDefinition().MakeGenericType ctx.JsonValueType
+        ProvidedTypeBuilder.MakeGenericType(typ.GetGenericTypeDefinition(), [ctx.JsonValueType])
     else
         typ
 

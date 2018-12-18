@@ -41,8 +41,8 @@ let convertJsonValue missingValuesStr cultureStr canPassAllConversionCallingType
   let returnType = 
     match field.TypeWrapper with
     | TypeWrapper.None -> field.RuntimeType
-    | TypeWrapper.Option -> typedefof<option<_>>.MakeGenericType field.RuntimeType
-    | TypeWrapper.Nullable -> typedefof<Nullable<_>>.MakeGenericType field.RuntimeType
+    | TypeWrapper.Option -> ProviderImplementation.ProvidedTypes.ProvidedTypeBuilder.MakeGenericType(typedefof<option<_>>, [field.RuntimeType])
+    | TypeWrapper.Nullable -> ProviderImplementation.ProvidedTypes.ProvidedTypeBuilder.MakeGenericType(typedefof<Nullable<_>>, [field.RuntimeType])
 
   let wrapInLetIfNeeded (value:Expr) getBody =
     match value with
