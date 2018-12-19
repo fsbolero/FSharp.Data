@@ -158,7 +158,7 @@ Target.create "Build" <| fun _ ->
 
     buildProjs |> Seq.iter (fun proj ->
         let projName = System.IO.Path.GetFileNameWithoutExtension proj
-        MSBuild.runRelease (fun opts -> { opts with Properties = ["SourceLinkCreate", "true"] }) null "Build" [projName]
+        MSBuild.runRelease id null "Build" [projName]
         |> logResults (sprintf "%s-Output:" projName))
  else
     // Both flavours of FSharp.Data.DesignTime.dll (net45 and netstandard2.0) must be built _before_ building FSharp.Data
