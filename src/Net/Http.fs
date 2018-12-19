@@ -1512,13 +1512,13 @@ type Http private() =
                 [<Optional>] ?headers:seq<string * string>,
                 [<Optional>] ?httpMethod,
                 [<Optional>] ?body,
-                [<Optional>] ?cookies:seq<_>,
-                [<Optional>] ?cookieContainer,
-                [<Optional>] ?silentHttpErrors,
-                [<Optional>] ?silentCookieErrors,
+                [<Optional>] ?cookies:seq<string * string>,
+                [<Optional>] ?cookieContainer: CookieContainer,
+                [<Optional>] ?silentHttpErrors: bool,
+                [<Optional>] ?silentCookieErrors: bool,
                 [<Optional>] ?responseEncodingOverride,
-                [<Optional>] ?customizeHttpRequest,
-                [<Optional>] ?timeout
+                [<Optional>] ?customizeHttpRequest: (HttpWebRequest -> HttpWebRequest),
+                [<Optional>] ?timeout: int
             ) = async {
         let uri = Http.AppendQueryToUrl(url, defaultArg query []) |> Uri
         let httpMethod =
@@ -1531,14 +1531,10 @@ type Http private() =
             for k, v in headers do msg.Headers.Add(k, v)
         )
         let! resp = Http.Client.SendAsync(msg) |> Async.AwaitTask
-        let! body = resp.Content.ReadAsStringAsync() |> Async.AwaitTask // TODO: binary?
-        return { Body = Text body
-                 StatusCode = int resp.StatusCode
-                 ResponseUrl = url
-                 Headers = Map [ for h in resp.Headers do
-                                    for v in h.Value do
-                                        yield h.Key, v ]
-                 Cookies = Map.empty (* TODO *) }
+        let! body = resp.Content.ReadAsStreamAsync() |> Async.AwaitTask // TODO: binary?
+        return! toHttpResponse uri.OriginalString (int resp.StatusCode) resp.Content.Headers.ContentType.MediaType resp.Content.Headers.ContentType.CharSet responseEncodingOverride
+                    Map.empty Map.empty // TODO: pass the cookies and headers
+                    body
     }
 
     static member private OldInnerRequest

@@ -6,7 +6,7 @@ init:
 build_script:
   - cmd: build.cmd CleanInternetCaches
   - cmd: build.cmd AppVeyorBuildVersion
-  - cmd: build.cmd All
+  - cmd: build.cmd Build # All
   - cmd: build.cmd NuGet
 
 test: off
