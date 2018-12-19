@@ -9,14 +9,6 @@ build_script:
   - cmd: build.cmd All
   - cmd: build.cmd NuGet
 
-matrix:
-  fast_finish: true
-
-environment:
-    matrix:
-      - USE_MSBUILD: 1
-      - USE_DOTNET: 1
-  
 test: off
 
 artifacts:
