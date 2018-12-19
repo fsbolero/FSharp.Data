@@ -164,7 +164,7 @@ Target.create "Build" <| fun _ ->
     // Both flavours of FSharp.Data.DesignTime.dll (net45 and netstandard2.0) must be built _before_ building FSharp.Data
     buildProjs |> Seq.iter (fun proj ->
       DotNet.build (fun opts -> { opts with Common = { opts.Common with DotNetCliPath = getSdkPath ()
-                                                                        CustomParams = Some "/v:n /p:SourceLinkCreate=true" }
+                                                                        CustomParams = Some "/v:n" }
                                             Configuration = DotNet.BuildConfiguration.Release }) proj
     )
 
